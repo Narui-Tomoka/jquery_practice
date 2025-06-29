@@ -1,0 +1,149 @@
+【なぜ hover() は mouseenter / mouseleave を使うのか？】
+
+hover() は、ユーザーが要素全体に入ったり出たりするという感覚的なホバー状態を再現するために、
+
+
+
+$('#element').hover(handlerIn, handlerOut);
+
+
+
+
+
+この裏で実際には
+
+
+
+$('#element').on('mouseenter', handlerIn).on('mouseleave', handlerOut);
+
+
+
+
+
+みたいな動きをしてます。
+
+
+
+【なぜそれが便利か？】
+
+例えば、こんなHTMLがあったとします：
+
+
+
+
+<div id="box">
+
+  <div class="inner">中の要素</div>
+
+</div>
+
+
+
+
+
+ここで #box に mouseover / mouseout を使うと、#box → .inner にマウスが移動しただけで mouseout が発生してしまう。
+
+でも、mouseenter / mouseleave（= hover()）なら、#box から完全に外に出るまでイベントが発火しない。
+
+これが「hoverっぽい」自然な動作になるわけです。
+
+
+
+【結論】
+
+hover() は jQueryが自然なホバー挙動を実現するために mouseenter / mouseleave を内部で使っている。
+これにより、子要素に触っても hover 状態が解除されない、という意図された挙動が得られる。
+
+
+
+
+
+
+mouseover / mouseout と mouseenter / mouseleave のバブリングの違いを確認できる簡単なHTML＋jQueryのコードを用意するね。
+
+
+
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>イベントバブリングの違い</title>
+
+  <style>
+
+    #parent {
+
+      width: 300px;
+
+      height: 200px;
+
+      background-color: #cce5ff;
+
+      padding: 20px;
+
+    }
+
+
+
+    #child {
+
+      width: 150px;
+
+      height: 100px;
+
+      background-color: #99ccff;
+
+    }
+
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+
+
+
+<div id="parent">
+
+  親要素
+
+  <div id="child">子要素</div>
+
+</div>
+
+
+
+<script>
+
+  // mouseover / mouseout の場合（バブリングあり）
+
+  $('#parent').on('mouseover', function() {
+
+    console.log('mouseover: 親にマウスが入った');
+
+  });
+
+【やってみて確認できること】
+
+マウスを「親要素」内に入れると：
+mouseover と mouseenter の両方が発火
+マウスを「親要素の中の子要素（青いやつ）」に移動すると：
+mouseover / mouseout がまた発火
+でも mouseenter / mouseleave は発火しない
+マウスを完全に親要素の外に出すと：
+mouseout と mouseleave の両方が発火
+
+
+【ポイント】
+
+mouseover / mouseout → 子要素に移動するだけで親から出たと見なされる（バブリングする）
+mouseenter / mouseleave → 要素全体の入出だけで反応（バブリングしない）
+
+
+これを試せば、「hover() が mouseenter / mouseleave を使う理由」が感覚的にわかるはず！

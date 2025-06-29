@@ -6,7 +6,8 @@
 
 .nav-container {
   margin: 0;
-  position: relative; }
+  position: relative;
+}
 
 .nav {
   border: 1px solid #ccc;
@@ -18,6 +19,8 @@
 }
 
 .nav-item {
+  /*flex-grow:1 flex-shrink:1 flex-basis:0の省略形*/
+  /*子要素を1:1の比率で伸び縮みさせる*/
   flex: 1;
 }
 
