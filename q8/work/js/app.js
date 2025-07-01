@@ -7,29 +7,29 @@ $(function () {
     if (bookInfo[0].items && bookInfo[0].items.length > 0) {
       // 検索結果が1件以上あるときの処理
       // 今回は値しか利用しないのでインデックス番号は使わないが、$.eachは引数を2つ必要とするので
-      // インデックス番号を取得する引数getindexを設定している
+      // インデックス番号を取得する引数getIndexを設定している
       // $.eachは配列内のアイテムそれぞれに同じ処理をすることができる
-      $.each(bookInfo[0].items, function (getindex, getval) {
-        // 定数getresultを定義して、表示する情報をそのままHTMLに入れられる状態にして代入する
-        const getresult =
+      $.each(bookInfo[0].items, function (getIndex, getVal) {
+        // 定数getResultを定義して、表示する情報をそのままHTMLに入れられる状態にして代入する
+        const getResult =
           '<li class="lists-item"><div class="list-inner">' +
           "<p>タイトル：" +
-          (getval.title || "タイトル不明") + // 取得内容にタイトル情報があればタイトル、タイトル情報がなければ「タイトル不明」を入れる
+          (getVal.title || "タイトル不明") + // 取得内容にタイトル情報があればタイトル、タイトル情報がなければ「タイトル不明」を入れる
           "</p>" +
           "<p>作者：" +
-          (getval["dc:creator"] || "作者不明") + // データがあれば作者情報、なければ「作者不明」を入れる
+          (getVal["dc:creator"] || "作者不明") + // データがあれば作者情報、なければ「作者不明」を入れる
           "</p>" +
           "<p>出版社：" +
           // 取得した値の中にdc:publisherのキーが存在し、0番目の要素があるなら0番目の要素を入れる。なければ「出版社不明」を入れる。
-          ((getval["dc:publisher"] && getval["dc:publisher"][0]) ||
+          ((getVal["dc:publisher"] && getVal["dc:publisher"][0]) ||
             "出版社不明") +
           "</p>" +
           '<a href="' +
-          getval.link["@id"] + // linkキーの@id（書籍情報のurl）を入れる
+          getVal.link["@id"] + // linkキーの@id（書籍情報のurl）を入れる
           '" target="_blank">書籍情報</a>' +
           "</div></li>";
-        // .listsの中の一番最初に定数getresult（書籍情報）を追加する
-        $(".lists").prepend(getresult);
+        // .listsの中の一番最初に定数getResult（書籍情報）を追加する
+        $(".lists").prepend(getResult);
       });
       // 検索結果が0件のときの処理
     } else {
@@ -126,4 +126,4 @@ $(function () {
 // finallyはtryとセットで使う。処理が成功しても失敗しても行う後処理を記述する
 
 // jQuery専用の非同期処理の書き方
-// $ajax() .done() .fail() always()
+// $ajax() .done() .fail() .always()
